@@ -190,17 +190,17 @@ const SpeechRecognitionApp = () => {
                 <div>
                   <h1 className="text-2xl font-bold text-foreground">AI Speech Recognition</h1>
                   <p className="text-sm text-muted-foreground">
-                    Real-time speech-to-text with Web Speech API
+                    Advanced speech-to-text with OpenAI Whisper, noise suppression and spelling correction
                   </p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="hidden sm:flex">
-                  Web Speech API
+                  Whisper AI
                 </Badge>
                 <Badge variant="secondary" className="hidden sm:flex">
-                  Real-time
+                  RNNoise
                 </Badge>
                 <Button
                   variant="outline"
