@@ -39,8 +39,7 @@ const SpeechRecognitionApp = () => {
   });
   
   const [showSettings, setShowSettings] = useState(false);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
@@ -52,39 +51,53 @@ const SpeechRecognitionApp = () => {
 
   const startRecording = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: options.noiseSuppressionEnabled,
-          autoGainControl: true,
-          sampleRate: 44100
-        } 
-      });
+      // Check if speech recognition is supported
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      if (!SpeechRecognition) {
+        toast({
+          title: "Speech Recognition not supported",
+          description: "Your browser doesn't support speech recognition",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
       
-      audioChunksRef.current = [];
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+      recognition.onresult = (event: any) => {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          
+          if (event.results[i].isFinal) {
+            setTranscription(prev => prev + transcript + ' ');
+          }
         }
       };
       
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        await processAudio(audioBlob);
-        stream.getTracks().forEach(track => track.stop());
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        toast({
+          title: "Recognition error", 
+          description: "There was an error with speech recognition",
+          variant: "destructive"
+        });
       };
       
-      mediaRecorderRef.current = mediaRecorder;
-      mediaRecorder.start(100); // Collect data every 100ms
+      recognition.onend = () => {
+        if (recordingState.isRecording) {
+          recognition.start();
+        }
+      };
+      
+      recognitionRef.current = recognition;
+      recognition.start();
       
       setRecordingState(prev => ({ ...prev, isRecording: true, duration: 0 }));
       
-      // Start duration timer
       intervalRef.current = setInterval(() => {
         setRecordingState(prev => ({ ...prev, duration: prev.duration + 1 }));
       }, 1000);
@@ -98,16 +111,16 @@ const SpeechRecognitionApp = () => {
       console.error('Error starting recording:', error);
       toast({
         title: "Recording failed",
-        description: "Please check your microphone permissions",
+        description: "Please check your microphone permissions", 
         variant: "destructive"
       });
     }
-  }, [options.noiseSuppressionEnabled, toast]);
+  }, [toast, recordingState.isRecording]);
 
   const stopRecording = useCallback(() => {
-    if (mediaRecorderRef.current && recordingState.isRecording) {
-      mediaRecorderRef.current.stop();
-      setRecordingState(prev => ({ ...prev, isRecording: false, isProcessing: true }));
+    if (recognitionRef.current && recordingState.isRecording) {
+      recognitionRef.current.stop();
+      setRecordingState(prev => ({ ...prev, isRecording: false }));
       
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
@@ -115,41 +128,11 @@ const SpeechRecognitionApp = () => {
       }
       
       toast({
-        title: "Processing audio",
-        description: "Transcribing your speech..."
+        title: "Recording stopped",
+        description: "Speech recognition completed"
       });
     }
   }, [recordingState.isRecording, toast]);
-
-  const processAudio = async (audioBlob: Blob) => {
-    try {
-      // Placeholder for audio processing pipeline
-      // This would integrate with OpenAI Whisper, RNNoise, SymSpell, and DTW
-      
-      // Simulate processing time
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Mock transcription result
-      const mockTranscription = "This is a sample transcription. In a real implementation, this would be processed through OpenAI Whisper for speech recognition, with noise suppression and spelling correction applied.";
-      
-      setTranscription(prev => prev + (prev ? ' ' : '') + mockTranscription);
-      setRecordingState(prev => ({ ...prev, isProcessing: false }));
-      
-      toast({
-        title: "Transcription complete",
-        description: "Audio has been successfully processed"
-      });
-      
-    } catch (error) {
-      console.error('Error processing audio:', error);
-      setRecordingState(prev => ({ ...prev, isProcessing: false }));
-      toast({
-        title: "Processing failed",
-        description: "There was an error processing your audio",
-        variant: "destructive"
-      });
-    }
-  };
 
   const exportTranscription = useCallback(() => {
     if (!transcription.trim()) {
@@ -207,17 +190,17 @@ const SpeechRecognitionApp = () => {
                 <div>
                   <h1 className="text-2xl font-bold text-foreground">AI Speech Recognition</h1>
                   <p className="text-sm text-muted-foreground">
-                    Advanced speech-to-text with noise suppression and spelling correction
+                    Real-time speech-to-text with Web Speech API
                   </p>
                 </div>
               </div>
               
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="hidden sm:flex">
-                  Whisper AI
+                  Web Speech API
                 </Badge>
                 <Badge variant="secondary" className="hidden sm:flex">
-                  RNNoise
+                  Real-time
                 </Badge>
                 <Button
                   variant="outline"
