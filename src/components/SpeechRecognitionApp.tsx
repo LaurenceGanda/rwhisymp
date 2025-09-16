@@ -178,10 +178,10 @@ const SpeechRecognitionApp = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-primary p-6">
+    <div className="min-h-screen bg-background p-6">
       <div className="mx-auto max-w-6xl space-y-6">
         {/* Header */}
-        <Card className="bg-gradient-secondary border-border/50 shadow-card-custom">
+        <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
           <div className="p-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
@@ -228,7 +228,7 @@ const SpeechRecognitionApp = () => {
 
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Recording Controls */}
-          <Card className="bg-gradient-secondary border-border/50 shadow-card-custom">
+          <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
             <div className="p-6">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">

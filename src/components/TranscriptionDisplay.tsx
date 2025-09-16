@@ -51,7 +51,7 @@ const TranscriptionDisplay = ({
   const charCount = transcription.length;
 
   return (
-    <Card className="bg-gradient-secondary border-border/50 shadow-card-custom">
+    <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
       <div className="p-6">
         <div className="space-y-4">
           {/* Header */}
