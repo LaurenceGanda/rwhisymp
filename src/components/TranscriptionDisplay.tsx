@@ -52,50 +52,53 @@ const TranscriptionDisplay = ({
 
   return (
     <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="space-y-4">
           {/* Header */}
-          <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-foreground">Transcription</h2>
-            <div className="flex items-center gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h2 className="text-base sm:text-lg font-semibold text-foreground">Transcription</h2>
+            <div className="flex items-center gap-2 flex-wrap">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={copyToClipboard}
                 disabled={!transcription.trim()}
-                className="border-border/50"
+                className="border-border/50 flex-1 sm:flex-none"
               >
-                <Copy className="h-4 w-4" />
+                <Copy className="h-4 w-4 mr-2" />
+                <span className="sm:hidden">Copy</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onExport}
                 disabled={!transcription.trim()}
-                className="border-border/50"
+                className="border-border/50 flex-1 sm:flex-none"
               >
-                <Download className="h-4 w-4" />
+                <Download className="h-4 w-4 mr-2" />
+                <span className="sm:hidden">Export</span>
               </Button>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={onClear}
                 disabled={!transcription.trim()}
-                className="border-border/50 hover:border-destructive/50 hover:text-destructive"
+                className="border-border/50 hover:border-destructive/50 hover:text-destructive flex-1 sm:flex-none"
               >
-                <Trash2 className="h-4 w-4" />
+                <Trash2 className="h-4 w-4 mr-2" />
+                <span className="sm:hidden">Clear</span>
               </Button>
             </div>
           </div>
 
           {/* Transcription Content */}
           <div className="relative">
-            <ScrollArea className="h-80 w-full rounded-lg border border-border/50 bg-card/50 p-4">
+            <ScrollArea className="h-60 sm:h-80 w-full rounded-lg border border-border/50 bg-card/50 p-3 sm:p-4">
               {isProcessing && (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center space-y-3">
-                    <div className="animate-spin h-8 w-8 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
-                    <p className="text-sm text-muted-foreground">
+                    <div className="animate-spin h-6 w-6 sm:h-8 sm:w-8 border-2 border-primary border-t-transparent rounded-full mx-auto"></div>
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Processing audio with AI...
                     </p>
                   </div>
@@ -105,8 +108,8 @@ const TranscriptionDisplay = ({
               {!isProcessing && !transcription.trim() && (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center space-y-3 opacity-50">
-                    <FileText className="h-12 w-12 mx-auto text-muted-foreground" />
-                    <p className="text-sm text-muted-foreground">
+                    <FileText className="h-10 w-10 sm:h-12 sm:w-12 mx-auto text-muted-foreground" />
+                    <p className="text-xs sm:text-sm text-muted-foreground">
                       Your transcription will appear here
                     </p>
                   </div>
@@ -115,7 +118,7 @@ const TranscriptionDisplay = ({
               
               {!isProcessing && transcription.trim() && (
                 <div className="space-y-4">
-                  <p className="text-sm leading-relaxed text-foreground whitespace-pre-wrap">
+                  <p className="text-xs sm:text-sm leading-relaxed text-foreground whitespace-pre-wrap">
                     {transcription}
                   </p>
                 </div>
@@ -129,14 +132,14 @@ const TranscriptionDisplay = ({
           </div>
 
           {/* Stats */}
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-4 justify-center sm:justify-start">
               <span>{wordCount} words</span>
               <span>{charCount} characters</span>
             </div>
             
             {transcription.trim() && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center sm:justify-end gap-2">
                 <div className="h-2 w-2 rounded-full bg-[hsl(var(--success-glow))] animate-pulse"></div>
                 <span>Ready</span>
               </div>
@@ -146,7 +149,7 @@ const TranscriptionDisplay = ({
           <Separator className="bg-border/50" />
 
           {/* Features Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs">
             <div className="text-center p-2 rounded-lg bg-gradient-accent border border-border/30">
               <div className="font-medium text-foreground">Whisper AI</div>
               <div className="text-muted-foreground">Speech Recognition</div>

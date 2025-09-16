@@ -28,22 +28,22 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
   };
 
   return (
-    <Card className="bg-gradient-secondary border-border/50 shadow-card-custom">
-      <div className="p-6">
-        <div className="space-y-6">
+    <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
+      <div className="p-4 sm:p-6">
+        <div className="space-y-4 sm:space-y-6">
           {/* Header */}
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div className="flex items-center gap-3">
               <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-accent">
                 <Settings className="h-4 w-4 text-primary" />
               </div>
-              <h3 className="text-lg font-semibold text-foreground">Audio Processing Settings</h3>
+              <h3 className="text-base sm:text-lg font-semibold text-foreground">Audio Processing Settings</h3>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="text-muted-foreground hover:text-foreground"
+              className="text-muted-foreground hover:text-foreground self-end sm:self-auto"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -51,7 +51,7 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
 
           <Separator className="bg-border/50" />
 
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 xl:grid-cols-2">
             {/* Audio Input Settings */}
             <div className="space-y-4">
               <div className="flex items-center gap-2">
@@ -60,19 +60,21 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="noise-suppression" className="text-sm font-medium">
-                    Noise Suppression (RNNoise)
-                  </Label>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <Label htmlFor="noise-suppression" className="text-sm font-medium">
+                      Noise Suppression (RNNoise)
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Uses RNNoise to reduce background noise and improve speech clarity
+                    </p>
+                  </div>
                   <Switch
                     id="noise-suppression"
                     checked={options.noiseSuppressionEnabled}
                     onCheckedChange={(checked) => updateOption('noiseSuppressionEnabled', checked)}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Uses RNNoise to reduce background noise and improve speech clarity
-                </p>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Audio Quality</Label>
@@ -98,19 +100,21 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
               </div>
 
               <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Label htmlFor="spelling-correction" className="text-sm font-medium">
-                    Spelling Correction (SymSpell)
-                  </Label>
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <Label htmlFor="spelling-correction" className="text-sm font-medium">
+                      Spelling Correction (SymSpell)
+                    </Label>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Automatically corrects spelling errors in the transcription
+                    </p>
+                  </div>
                   <Switch
                     id="spelling-correction"
                     checked={options.spellingCorrectionEnabled}
                     onCheckedChange={(checked) => updateOption('spellingCorrectionEnabled', checked)}
                   />
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  Automatically corrects spelling errors in the transcription
-                </p>
 
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">
@@ -154,29 +158,29 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
           <div className="space-y-4">
             <h4 className="font-medium text-foreground">Advanced Features</h4>
             
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex items-center justify-between">
+            <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2">
+              <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-accent border border-border/30">
                 <Label htmlFor="dtw-alignment" className="text-sm font-medium">
                   Dynamic Time Warping
                 </Label>
                 <Switch id="dtw-alignment" defaultChecked />
               </div>
               
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-accent border border-border/30">
                 <Label htmlFor="real-time" className="text-sm font-medium">
                   Real-time Processing
                 </Label>
                 <Switch id="real-time" defaultChecked />
               </div>
               
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-accent border border-border/30">
                 <Label htmlFor="punctuation" className="text-sm font-medium">
                   Auto Punctuation
                 </Label>
                 <Switch id="punctuation" defaultChecked />
               </div>
               
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between p-2 rounded-lg bg-gradient-accent border border-border/30">
                 <Label htmlFor="speaker-detection" className="text-sm font-medium">
                   Speaker Detection
                 </Label>
@@ -188,7 +192,7 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
           <Separator className="bg-border/50" />
 
           {/* Reset Button */}
-          <div className="flex justify-end">
+          <div className="flex justify-center sm:justify-end">
             <Button
               variant="outline"
               onClick={() => {
@@ -198,7 +202,7 @@ const SettingsPanel = ({ options, onOptionsChange, onClose }: SettingsPanelProps
                   confidenceThreshold: 0.7
                 });
               }}
-              className="border-border/50"
+              className="border-border/50 w-full sm:w-auto"
             >
               Reset to Defaults
             </Button>

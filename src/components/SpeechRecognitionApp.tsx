@@ -178,29 +178,29 @@ const SpeechRecognitionApp = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="mx-auto max-w-6xl space-y-6">
+    <div className="min-h-screen bg-background p-3 sm:p-6">
+      <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
         {/* Header */}
         <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-          <div className="p-6">
-            <div className="flex items-center justify-between">
+          <div className="p-4 sm:p-6">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-accent">
-                  <Volume2 className="h-6 w-6 text-primary" />
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-accent">
+                  <Volume2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-foreground">AI Speech Recognition</h1>
-                  <p className="text-sm text-muted-foreground">
+                  <h1 className="text-xl sm:text-2xl font-bold text-foreground">AI Speech Recognition</h1>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
                     Advanced speech-to-text with OpenAI Whisper, noise suppression and spelling correction
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="hidden sm:flex">
+              <div className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
+                <Badge variant="secondary" className="text-xs">
                   Whisper AI
                 </Badge>
-                <Badge variant="secondary" className="hidden sm:flex">
+                <Badge variant="secondary" className="text-xs">
                   RNNoise
                 </Badge>
                 <ThemeToggle />
@@ -226,18 +226,18 @@ const SpeechRecognitionApp = () => {
           />
         )}
 
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 xl:grid-cols-2">
           {/* Recording Controls */}
           <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-            <div className="p-6">
-              <div className="space-y-6">
+            <div className="p-4 sm:p-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-lg font-semibold text-foreground">Recording</h2>
+                  <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
                   <div className="flex items-center gap-2">
                     <Badge 
                       variant={recordingState.isRecording ? "destructive" : "secondary"}
                       className={cn(
-                        "transition-all duration-300",
+                        "transition-all duration-300 text-xs",
                         recordingState.isRecording && "animate-pulse shadow-glow"
                       )}
                     >
@@ -254,10 +254,10 @@ const SpeechRecognitionApp = () => {
 
                 {/* Recording Duration */}
                 <div className="text-center">
-                  <div className="text-3xl font-mono font-bold text-foreground">
+                  <div className="text-2xl sm:text-3xl font-mono font-bold text-foreground">
                     {formatDuration(recordingState.duration)}
                   </div>
-                  <p className="text-sm text-muted-foreground">Recording time</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Recording time</p>
                 </div>
 
                 {/* Controls */}
@@ -267,16 +267,16 @@ const SpeechRecognitionApp = () => {
                     disabled={recordingState.isProcessing}
                     size="lg"
                     className={cn(
-                      "h-16 w-16 rounded-full transition-all duration-300",
+                      "h-14 w-14 sm:h-16 sm:w-16 rounded-full transition-all duration-300",
                       recordingState.isRecording 
                         ? "bg-destructive hover:bg-destructive/90 shadow-glow animate-pulse" 
                         : "bg-gradient-primary hover:shadow-glow"
                     )}
                   >
                     {recordingState.isRecording ? (
-                      <MicOff className="h-6 w-6" />
+                      <MicOff className="h-5 w-5 sm:h-6 sm:w-6" />
                     ) : (
-                      <Mic className="h-6 w-6" />
+                      <Mic className="h-5 w-5 sm:h-6 sm:w-6" />
                     )}
                   </Button>
                 </div>
@@ -284,7 +284,7 @@ const SpeechRecognitionApp = () => {
                 {/* Processing Options */}
                 <div className="space-y-3">
                   <Separator className="bg-border/50" />
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="flex items-center space-x-2">
                       <Switch
                         id="noise-suppression"
@@ -293,7 +293,7 @@ const SpeechRecognitionApp = () => {
                           setOptions(prev => ({ ...prev, noiseSuppressionEnabled: checked }))
                         }
                       />
-                      <Label htmlFor="noise-suppression" className="text-sm">
+                      <Label htmlFor="noise-suppression" className="text-xs sm:text-sm">
                         Noise Suppression
                       </Label>
                     </div>
@@ -305,7 +305,7 @@ const SpeechRecognitionApp = () => {
                           setOptions(prev => ({ ...prev, spellingCorrectionEnabled: checked }))
                         }
                       />
-                      <Label htmlFor="spelling-correction" className="text-sm">
+                      <Label htmlFor="spelling-correction" className="text-xs sm:text-sm">
                         Spell Check
                       </Label>
                     </div>
