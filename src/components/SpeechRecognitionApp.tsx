@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils';
 import AudioVisualizer from './AudioVisualizer';
 import TranscriptionDisplay from './TranscriptionDisplay';
 import SettingsPanel from './SettingsPanel';
+import { ThemeToggle } from './ThemeToggle';
 
 interface RecordingState {
   isRecording: boolean;
@@ -202,6 +203,7 @@ const SpeechRecognitionApp = () => {
                 <Badge variant="secondary" className="hidden sm:flex">
                   RNNoise
                 </Badge>
+                <ThemeToggle />
                 <Button
                   variant="outline"
                   size="sm"
