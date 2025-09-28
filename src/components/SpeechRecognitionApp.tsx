@@ -5,12 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Mic, MicOff, Download, Settings, Volume2 } from 'lucide-react';
+import { Mic, MicOff, Volume2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import AudioVisualizer from './AudioVisualizer';
 import TranscriptionDisplay from './TranscriptionDisplay';
-import SettingsPanel from './SettingsPanel';
 import { ThemeToggle } from './ThemeToggle';
 
 interface RecordingState {
@@ -38,8 +37,6 @@ const SpeechRecognitionApp = () => {
     spellingCorrectionEnabled: true,
     confidenceThreshold: 0.7
   });
-  
-  const [showSettings, setShowSettings] = useState(false);
   const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
@@ -189,44 +186,21 @@ const SpeechRecognitionApp = () => {
                   <Volume2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl font-bold text-foreground">AI Speech Recognition</h1>
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">AI Speech Recognition</h1>
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    Advanced speech-to-text with OpenAI Whisper, noise suppression and spelling correction
+                    Advanced speech-to-text technology
                   </p>
                 </div>
               </div>
               
-              <div className="flex items-center justify-center sm:justify-end gap-2 flex-wrap">
-                <Badge variant="secondary" className="text-xs">
-                  Whisper AI
-                </Badge>
-                <Badge variant="secondary" className="text-xs">
-                  RNNoise
-                </Badge>
+              <div className="flex items-center justify-center sm:justify-end">
                 <ThemeToggle />
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setShowSettings(!showSettings)}
-                  className="border-border/50"
-                >
-                  <Settings className="h-4 w-4" />
-                </Button>
               </div>
             </div>
           </div>
         </Card>
 
-        {/* Settings Panel */}
-        {showSettings && (
-          <SettingsPanel 
-            options={options} 
-            onOptionsChange={setOptions}
-            onClose={() => setShowSettings(false)}
-          />
-        )}
-
-        <div className="grid gap-4 sm:gap-6 xl:grid-cols-2">
+        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-2">
           {/* Recording Controls */}
           <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
             <div className="p-4 sm:p-6">
@@ -293,7 +267,7 @@ const SpeechRecognitionApp = () => {
                           setOptions(prev => ({ ...prev, noiseSuppressionEnabled: checked }))
                         }
                       />
-                      <Label htmlFor="noise-suppression" className="text-xs sm:text-sm">
+                      <Label htmlFor="noise-suppression" className="text-xs sm:text-sm font-medium">
                         Noise Suppression
                       </Label>
                     </div>
@@ -305,7 +279,7 @@ const SpeechRecognitionApp = () => {
                           setOptions(prev => ({ ...prev, spellingCorrectionEnabled: checked }))
                         }
                       />
-                      <Label htmlFor="spelling-correction" className="text-xs sm:text-sm">
+                      <Label htmlFor="spelling-correction" className="text-xs sm:text-sm font-medium">
                         Spell Check
                       </Label>
                     </div>
