@@ -180,12 +180,12 @@ const AudioVisualizer = ({ isRecording, isProcessing }: AudioVisualizerProps) =>
     )}>
       <canvas
         ref={canvasRef}
-        width={400}
-        height={120}
-        className="h-20 sm:h-30 w-full"
+        width={600}
+        height={180}
+        className="h-32 sm:h-40 lg:h-48 w-full"
         style={{ 
           width: '100%', 
-          height: '80px',
+          height: '120px',
           imageRendering: 'pixelated'
         }}
       />
@@ -194,14 +194,14 @@ const AudioVisualizer = ({ isRecording, isProcessing }: AudioVisualizerProps) =>
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
         {isProcessing && (
           <div className="text-center px-4">
-            <div className="text-sm sm:text-lg font-semibold text-foreground animate-pulse">
+            <div className="text-base sm:text-xl lg:text-2xl font-semibold text-foreground animate-pulse">
               Processing Audio...
             </div>
           </div>
         )}
         {!isRecording && !isProcessing && (
           <div className="text-center opacity-50 px-4">
-            <div className="text-xs sm:text-sm text-muted-foreground">
+            <div className="text-sm sm:text-base lg:text-lg text-muted-foreground">
               Click record to start capturing audio
             </div>
           </div>

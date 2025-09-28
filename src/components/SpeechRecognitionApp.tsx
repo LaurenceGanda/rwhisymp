@@ -200,11 +200,11 @@ const SpeechRecognitionApp = () => {
           </div>
         </Card>
 
-        <div className="grid gap-4 sm:gap-6 lg:grid-cols-2 xl:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 xl:grid-cols-2">
           {/* Recording Controls */}
           <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-            <div className="p-4 sm:p-6">
-              <div className="space-y-4 sm:space-y-6">
+            <div className="p-6 sm:p-8">
+              <div className="space-y-6 sm:space-y-8">
                 <div className="flex items-center justify-between">
                   <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
                   <div className="flex items-center gap-2">
@@ -227,8 +227,8 @@ const SpeechRecognitionApp = () => {
                 />
 
                 {/* Recording Duration */}
-                <div className="text-center">
-                  <div className="text-2xl sm:text-3xl font-mono font-bold text-foreground">
+                <div className="text-center py-4">
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-mono font-bold text-foreground">
                     {formatDuration(recordingState.duration)}
                   </div>
                   <p className="text-xs sm:text-sm text-muted-foreground">Recording time</p>
@@ -241,16 +241,16 @@ const SpeechRecognitionApp = () => {
                     disabled={recordingState.isProcessing}
                     size="lg"
                     className={cn(
-                      "h-14 w-14 sm:h-16 sm:w-16 rounded-full transition-all duration-300",
+                      "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full transition-all duration-300",
                       recordingState.isRecording 
                         ? "bg-destructive hover:bg-destructive/90 shadow-glow animate-pulse" 
                         : "bg-gradient-primary hover:shadow-glow"
                     )}
                   >
                     {recordingState.isRecording ? (
-                      <MicOff className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <MicOff className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                     ) : (
-                      <Mic className="h-5 w-5 sm:h-6 sm:w-6" />
+                      <Mic className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                     )}
                   </Button>
                 </div>
