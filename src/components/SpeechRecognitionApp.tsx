@@ -255,36 +255,6 @@ const SpeechRecognitionApp = () => {
                   </Button>
                 </div>
 
-                {/* Processing Options */}
-                <div className="space-y-3">
-                  <Separator className="bg-border/50" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="noise-suppression"
-                        checked={options.noiseSuppressionEnabled}
-                        onCheckedChange={(checked) => 
-                          setOptions(prev => ({ ...prev, noiseSuppressionEnabled: checked }))
-                        }
-                      />
-                      <Label htmlFor="noise-suppression" className="text-xs sm:text-sm font-medium">
-                        Noise Suppression
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <Switch
-                        id="spelling-correction"
-                        checked={options.spellingCorrectionEnabled}
-                        onCheckedChange={(checked) => 
-                          setOptions(prev => ({ ...prev, spellingCorrectionEnabled: checked }))
-                        }
-                      />
-                      <Label htmlFor="spelling-correction" className="text-xs sm:text-sm font-medium">
-                        Spell Check
-                      </Label>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </Card>
