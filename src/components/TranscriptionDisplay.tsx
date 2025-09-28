@@ -146,23 +146,6 @@ const TranscriptionDisplay = ({
             )}
           </div>
 
-          <Separator className="bg-border/50" />
-
-          {/* Features Info */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 text-xs">
-            <div className="text-center p-2 rounded-lg bg-gradient-accent border border-border/30">
-              <div className="font-medium text-foreground">Whisper AI</div>
-              <div className="text-muted-foreground">Speech Recognition</div>
-            </div>
-            <div className="text-center p-2 rounded-lg bg-gradient-accent border border-border/30">
-              <div className="font-medium text-foreground">RNNoise</div>
-              <div className="text-muted-foreground">Noise Suppression</div>
-            </div>
-            <div className="text-center p-2 rounded-lg bg-gradient-accent border border-border/30">
-              <div className="font-medium text-foreground">SymSpell</div>
-              <div className="text-muted-foreground">Spelling Correction</div>
-            </div>
-          </div>
         </div>
       </div>
     </Card>
