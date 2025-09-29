@@ -2,11 +2,15 @@ import { useState, useRef, useCallback, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Mic, MicOff } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Mic, MicOff, Volume2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import AudioVisualizer from './AudioVisualizer';
 import TranscriptionDisplay from './TranscriptionDisplay';
+import { ThemeToggle } from './ThemeToggle';
 
 interface RecordingState {
   isRecording: boolean;
@@ -170,79 +174,100 @@ const SpeechRecognitionApp = () => {
     };
   }, []);
 
-  // Sync recording state with localStorage for status dashboard
-  useEffect(() => {
-    localStorage.setItem('isRecording', recordingState.isRecording.toString());
-    localStorage.setItem('isProcessing', recordingState.isProcessing.toString());
-  }, [recordingState.isRecording, recordingState.isProcessing]);
-
   return (
-    <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 xl:grid-cols-2">
-      {/* Recording Controls */}
-      <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-        <div className="p-6 sm:p-8">
-          <div className="space-y-6 sm:space-y-8">
-            <div className="flex items-center justify-between">
-              <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
-              <div className="flex items-center gap-2">
-                <Badge 
-                  variant={recordingState.isRecording ? "destructive" : "secondary"}
-                  className={cn(
-                    "transition-all duration-300 text-xs",
-                    recordingState.isRecording && "animate-pulse shadow-glow"
-                  )}
-                >
-                  {recordingState.isRecording ? "LIVE" : "READY"}
-                </Badge>
+    <div className="min-h-screen bg-background p-3 sm:p-6">
+      <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
+        {/* Header */}
+        <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
+          <div className="p-4 sm:p-6">
+            <div className="flex items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-accent">
+                  <Volume2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
+                </div>
+                <div>
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">AI Speech Recognition</h1>
+                  <p className="text-xs sm:text-sm text-muted-foreground">
+                    Advanced speech-to-text technology
+                  </p>
+                </div>
+              </div>
+              
+              <div className="flex items-center">
+                <ThemeToggle />
               </div>
             </div>
-
-            {/* Audio Visualizer */}
-            <AudioVisualizer 
-              isRecording={recordingState.isRecording}
-              isProcessing={recordingState.isProcessing}
-            />
-
-            {/* Recording Duration */}
-            <div className="text-center py-4">
-              <div className="text-3xl sm:text-4xl lg:text-5xl font-mono font-bold text-foreground">
-                {formatDuration(recordingState.duration)}
-              </div>
-              <p className="text-xs sm:text-sm text-muted-foreground">Recording time</p>
-            </div>
-
-            {/* Controls */}
-            <div className="flex justify-center gap-4">
-              <Button
-                onClick={recordingState.isRecording ? stopRecording : startRecording}
-                disabled={recordingState.isProcessing}
-                size="lg"
-                className={cn(
-                  "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full transition-all duration-300",
-                  recordingState.isRecording 
-                    ? "bg-destructive hover:bg-destructive/90 shadow-glow animate-pulse" 
-                    : "bg-gradient-primary hover:shadow-glow"
-                )}
-              >
-                {recordingState.isRecording ? (
-                  <MicOff className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                ) : (
-                  <Mic className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
-                )}
-              </Button>
-            </div>
-
           </div>
-        </div>
-      </Card>
+        </Card>
 
-      {/* Transcription Display */}
-      <TranscriptionDisplay
-        transcription={transcription}
-        isProcessing={recordingState.isProcessing}
-        onExport={exportTranscription}
-        onClear={clearTranscription}
-      />
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+          {/* Recording Controls */}
+          <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
+            <div className="p-6 sm:p-8">
+              <div className="space-y-6 sm:space-y-8">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
+                  <div className="flex items-center gap-2">
+                    <Badge 
+                      variant={recordingState.isRecording ? "destructive" : "secondary"}
+                      className={cn(
+                        "transition-all duration-300 text-xs",
+                        recordingState.isRecording && "animate-pulse shadow-glow"
+                      )}
+                    >
+                      {recordingState.isRecording ? "LIVE" : "READY"}
+                    </Badge>
+                  </div>
+                </div>
+
+                {/* Audio Visualizer */}
+                <AudioVisualizer 
+                  isRecording={recordingState.isRecording}
+                  isProcessing={recordingState.isProcessing}
+                />
+
+                {/* Recording Duration */}
+                <div className="text-center py-4">
+                  <div className="text-3xl sm:text-4xl lg:text-5xl font-mono font-bold text-foreground">
+                    {formatDuration(recordingState.duration)}
+                  </div>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Recording time</p>
+                </div>
+
+                {/* Controls */}
+                <div className="flex justify-center gap-4">
+                  <Button
+                    onClick={recordingState.isRecording ? stopRecording : startRecording}
+                    disabled={recordingState.isProcessing}
+                    size="lg"
+                    className={cn(
+                      "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full transition-all duration-300",
+                      recordingState.isRecording 
+                        ? "bg-destructive hover:bg-destructive/90 shadow-glow animate-pulse" 
+                        : "bg-gradient-primary hover:shadow-glow"
+                    )}
+                  >
+                    {recordingState.isRecording ? (
+                      <MicOff className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    ) : (
+                      <Mic className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
+                    )}
+                  </Button>
+                </div>
+
+              </div>
+            </div>
+          </Card>
+
+          {/* Transcription Display */}
+          <TranscriptionDisplay
+            transcription={transcription}
+            isProcessing={recordingState.isProcessing}
+            onExport={exportTranscription}
+            onClear={clearTranscription}
+          />
+        </div>
+      </div>
     </div>
   );
 };
