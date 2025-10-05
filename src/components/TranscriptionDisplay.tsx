@@ -52,8 +52,8 @@ const TranscriptionDisplay = ({
 
   return (
     <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-      <div className="p-4 sm:p-6">
-        <div className="space-y-4">
+      <div className="p-8 sm:p-10 min-h-[600px] sm:min-h-[700px]">
+        <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 className="text-base sm:text-lg font-semibold text-foreground">Transcription</h2>
@@ -93,7 +93,7 @@ const TranscriptionDisplay = ({
 
           {/* Transcription Content */}
           <div className="relative">
-            <ScrollArea className="h-60 sm:h-80 w-full rounded-lg border border-border/50 bg-card/50 p-3 sm:p-4">
+            <ScrollArea className="h-80 sm:h-96 md:h-[450px] w-full rounded-lg border border-border/50 bg-card/50 p-4 sm:p-6">
               {isProcessing && (
                 <div className="flex items-center justify-center h-full">
                   <div className="text-center space-y-3">

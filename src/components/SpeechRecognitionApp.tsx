@@ -203,8 +203,8 @@ const SpeechRecognitionApp = () => {
         <div className="grid gap-6 sm:gap-8 lg:grid-cols-1 xl:grid-cols-2">
           {/* Recording Controls */}
           <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-            <div className="p-8 sm:p-10 md:p-12">
-              <div className="space-y-6 sm:space-y-8">
+            <div className="p-10 sm:p-12 md:p-14 min-h-[600px] sm:min-h-[700px]">
+              <div className="space-y-8 sm:space-y-10">
                 <div className="flex items-center justify-between">
                   <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
                   <div className="flex items-center gap-2">
