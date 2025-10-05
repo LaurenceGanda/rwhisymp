@@ -175,20 +175,20 @@ const SpeechRecognitionApp = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background p-3 sm:p-6">
-      <div className="mx-auto max-w-7xl space-y-4 sm:space-y-6">
+    <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8 lg:p-10">
+      <div className="mx-auto max-w-[90rem] space-y-6 sm:space-y-8">
         {/* Header */}
         <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-          <div className="p-4 sm:p-6">
+          <div className="p-6 sm:p-8 md:p-10">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-3">
                 <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-xl bg-gradient-accent">
                   <Volume2 className="h-5 w-5 sm:h-6 sm:w-6 text-primary" />
                 </div>
                 <div>
-                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">AI Speech Recognition</h1>
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-foreground">RWhiSymp</h1>
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    Advanced speech-to-text technology
+                    A Hybrid Speech-to-Text Noise Suppression Model
                   </p>
                 </div>
               </div>
@@ -200,10 +200,10 @@ const SpeechRecognitionApp = () => {
           </div>
         </Card>
 
-        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2 xl:grid-cols-2">
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-1 xl:grid-cols-2">
           {/* Recording Controls */}
           <Card className="bg-card/95 backdrop-blur-sm border-border/50 shadow-card-custom">
-            <div className="p-6 sm:p-8">
+            <div className="p-8 sm:p-10 md:p-12">
               <div className="space-y-6 sm:space-y-8">
                 <div className="flex items-center justify-between">
                   <h2 className="text-base sm:text-lg font-semibold text-foreground">Recording</h2>
