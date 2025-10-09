@@ -11,7 +11,7 @@ const AudioVisualizer = ({ isRecording, isProcessing }: AudioVisualizerProps) =>
   const animationFrameRef = useRef<number>();
   const audioContextRef = useRef<AudioContext | null>(null);
   const analyserRef = useRef<AnalyserNode | null>(null);
-  const dataArrayRef = useRef<Uint8Array | null>(null);
+  const dataArrayRef = useRef<Uint8Array<ArrayBuffer> | null>(null);
   const [audioData, setAudioData] = useState<number[]>(new Array(64).fill(0));
 
   const initializeAudioContext = async () => {
