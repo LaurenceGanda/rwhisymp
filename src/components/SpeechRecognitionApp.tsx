@@ -1,5 +1,4 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { pipeline } from '@huggingface/transformers';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -59,13 +58,8 @@ const SpeechRecognitionApp = () => {
   const [editorText, setEditorText] = useState('');
   const [fontSize, setFontSize] = useState('16');
   const [fontFamily, setFontFamily] = useState('sans');
-  const [modelLoading, setModelLoading] = useState(false);
-  
-  const transcriber = useRef<any>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
+  const recognitionRef = useRef<any>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
-  const processingIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
 
   const formatDuration = (seconds: number): string => {
@@ -74,102 +68,58 @@ const SpeechRecognitionApp = () => {
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const loadModel = useCallback(async () => {
-    if (transcriber.current) return;
-    
-    setModelLoading(true);
-    toast({
-      title: "Loading Whisper model...",
-      description: "This may take a moment on first load"
-    });
-    
-    try {
-      transcriber.current = await pipeline(
-        'automatic-speech-recognition',
-        'onnx-community/whisper-tiny.en',
-        { device: 'webgpu' }
-      );
-      
-      toast({
-        title: "Model loaded",
-        description: "Ready to transcribe audio"
-      });
-    } catch (error) {
-      console.error('Error loading model:', error);
-      toast({
-        title: "Model loading failed",
-        description: "Could not load Whisper model",
-        variant: "destructive"
-      });
-    } finally {
-      setModelLoading(false);
-    }
-  }, [toast]);
-
-  const processAudioChunk = useCallback(async () => {
-    if (!transcriber.current || audioChunksRef.current.length === 0) return;
-    
-    setRecordingState(prev => ({ ...prev, isProcessing: true }));
-    
-    try {
-      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-      const arrayBuffer = await audioBlob.arrayBuffer();
-      
-      const result = await transcriber.current(arrayBuffer);
-      
-      if (result?.text) {
-        setTranscription(prev => prev + result.text + ' ');
-      }
-      
-      // Keep only recent chunks to avoid memory issues
-      if (audioChunksRef.current.length > 10) {
-        audioChunksRef.current = audioChunksRef.current.slice(-5);
-      }
-    } catch (error) {
-      console.error('Error processing audio:', error);
-    } finally {
-      setRecordingState(prev => ({ ...prev, isProcessing: false }));
-    }
-  }, []);
-
   const startRecording = useCallback(async () => {
     try {
-      await loadModel();
+      // Check if speech recognition is supported
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          sampleRate: 16000,
-          channelCount: 1,
-          echoCancellation: true,
-          noiseSuppression: options.noiseSuppressionEnabled
-        }
-      });
+      if (!SpeechRecognition) {
+        toast({
+          title: "Speech Recognition not supported",
+          description: "Your browser doesn't support speech recognition",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'en-US';
       
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm'
-      });
-      
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+      recognition.onresult = (event: any) => {
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          const transcript = event.results[i][0].transcript;
+          
+          if (event.results[i].isFinal) {
+            setTranscription(prev => prev + transcript + ' ');
+          }
         }
       };
       
-      mediaRecorder.start(3000); // Capture in 3-second chunks
+      recognition.onerror = (event: any) => {
+        console.error('Speech recognition error:', event.error);
+        toast({
+          title: "Recognition error", 
+          description: "There was an error with speech recognition",
+          variant: "destructive"
+        });
+      };
+      
+      recognition.onend = () => {
+        if (recordingState.isRecording) {
+          recognition.start();
+        }
+      };
+      
+      recognitionRef.current = recognition;
+      recognition.start();
       
       setRecordingState(prev => ({ ...prev, isRecording: true, duration: 0 }));
       
       intervalRef.current = setInterval(() => {
         setRecordingState(prev => ({ ...prev, duration: prev.duration + 1 }));
       }, 1000);
-      
-      // Process audio chunks every 3 seconds
-      processingIntervalRef.current = setInterval(() => {
-        processAudioChunk();
-      }, 3000);
       
       toast({
         title: "Recording started",
@@ -184,13 +134,11 @@ const SpeechRecognitionApp = () => {
         variant: "destructive"
       });
     }
-  }, [toast, loadModel, processAudioChunk, options.noiseSuppressionEnabled]);
+  }, [toast, recordingState.isRecording]);
 
-  const stopRecording = useCallback(async () => {
-    if (mediaRecorderRef.current && recordingState.isRecording) {
-      mediaRecorderRef.current.stop();
-      mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
-      
+  const stopRecording = useCallback(() => {
+    if (recognitionRef.current && recordingState.isRecording) {
+      recognitionRef.current.stop();
       setRecordingState(prev => ({ ...prev, isRecording: false }));
       
       if (intervalRef.current) {
@@ -198,20 +146,12 @@ const SpeechRecognitionApp = () => {
         intervalRef.current = null;
       }
       
-      if (processingIntervalRef.current) {
-        clearInterval(processingIntervalRef.current);
-        processingIntervalRef.current = null;
-      }
-      
-      // Process any remaining audio
-      await processAudioChunk();
-      
       toast({
         title: "Recording stopped",
-        description: "Transcription completed"
+        description: "Speech recognition completed"
       });
     }
-  }, [recordingState.isRecording, toast, processAudioChunk]);
+  }, [recordingState.isRecording, toast]);
 
   const exportTranscription = useCallback(() => {
     if (!transcription.trim()) {
@@ -252,15 +192,8 @@ const SpeechRecognitionApp = () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
       }
-      if (processingIntervalRef.current) {
-        clearInterval(processingIntervalRef.current);
-      }
-      if (mediaRecorderRef.current && recordingState.isRecording) {
-        mediaRecorderRef.current.stop();
-        mediaRecorderRef.current.stream.getTracks().forEach(track => track.stop());
-      }
     };
-  }, [recordingState.isRecording]);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background p-4 sm:p-6 md:p-8 lg:p-10">
@@ -326,7 +259,7 @@ const SpeechRecognitionApp = () => {
                 <div className="flex justify-center gap-4">
                   <Button
                     onClick={recordingState.isRecording ? stopRecording : startRecording}
-                    disabled={modelLoading}
+                    disabled={recordingState.isProcessing}
                     size="lg"
                     className={cn(
                       "h-16 w-16 sm:h-20 sm:w-20 lg:h-24 lg:w-24 rounded-full transition-all duration-300",
@@ -335,9 +268,7 @@ const SpeechRecognitionApp = () => {
                         : "bg-gradient-primary hover:shadow-glow"
                     )}
                   >
-                    {modelLoading ? (
-                      <div className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    ) : recordingState.isRecording ? (
+                    {recordingState.isRecording ? (
                       <MicOff className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
                     ) : (
                       <Mic className="h-6 w-6 sm:h-7 sm:w-7 lg:h-8 lg:w-8" />
