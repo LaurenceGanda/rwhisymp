@@ -214,67 +214,7 @@ const SpeechRecognitionApp = () => {
                 </div>
               </div>
               
-              <div className="flex items-center gap-2">
-                <Dialog open={textEditorOpen} onOpenChange={setTextEditorOpen}>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Keyboard className="h-4 w-4" />
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-3xl max-h-[80vh]">
-                    <DialogHeader>
-                      <DialogTitle>Text Editor</DialogTitle>
-                      <DialogDescription>
-                        Type your text and customize the font settings
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="space-y-4">
-                      <div className="flex gap-4">
-                        <div className="flex-1">
-                          <Label htmlFor="fontSize">Font Size</Label>
-                          <Select value={fontSize} onValueChange={setFontSize}>
-                            <SelectTrigger id="fontSize">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="12">12px</SelectItem>
-                              <SelectItem value="14">14px</SelectItem>
-                              <SelectItem value="16">16px</SelectItem>
-                              <SelectItem value="18">18px</SelectItem>
-                              <SelectItem value="20">20px</SelectItem>
-                              <SelectItem value="24">24px</SelectItem>
-                              <SelectItem value="28">28px</SelectItem>
-                              <SelectItem value="32">32px</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="flex-1">
-                          <Label htmlFor="fontFamily">Font Family</Label>
-                          <Select value={fontFamily} onValueChange={setFontFamily}>
-                            <SelectTrigger id="fontFamily">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="sans">Sans Serif</SelectItem>
-                              <SelectItem value="serif">Serif</SelectItem>
-                              <SelectItem value="mono">Monospace</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                      </div>
-                      <Textarea
-                        value={editorText}
-                        onChange={(e) => setEditorText(e.target.value)}
-                        placeholder="Start typing here..."
-                        className="min-h-[400px] resize-none"
-                        style={{
-                          fontSize: `${fontSize}px`,
-                          fontFamily: fontFamily === 'sans' ? 'var(--font-sans)' : fontFamily === 'serif' ? 'Georgia, serif' : 'monospace'
-                        }}
-                      />
-                    </div>
-                  </DialogContent>
-                </Dialog>
+              <div className="flex items-center">
                 <ThemeToggle />
               </div>
             </div>
@@ -348,6 +288,71 @@ const SpeechRecognitionApp = () => {
             onClear={clearTranscription}
           />
         </div>
+
+        {/* Floating Keyboard Button */}
+        <Dialog open={textEditorOpen} onOpenChange={setTextEditorOpen}>
+          <DialogTrigger asChild>
+            <Button 
+              size="lg"
+              className="fixed bottom-8 left-1/2 -translate-x-1/2 h-16 w-16 rounded-full shadow-lg hover:shadow-xl transition-all z-50"
+            >
+              <Keyboard className="h-7 w-7" />
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-3xl max-h-[80vh]">
+            <DialogHeader>
+              <DialogTitle>Text Editor</DialogTitle>
+              <DialogDescription>
+                Type your text and customize the font settings
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div className="flex gap-4">
+                <div className="flex-1">
+                  <Label htmlFor="fontSize">Font Size</Label>
+                  <Select value={fontSize} onValueChange={setFontSize}>
+                    <SelectTrigger id="fontSize">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="12">12px</SelectItem>
+                      <SelectItem value="14">14px</SelectItem>
+                      <SelectItem value="16">16px</SelectItem>
+                      <SelectItem value="18">18px</SelectItem>
+                      <SelectItem value="20">20px</SelectItem>
+                      <SelectItem value="24">24px</SelectItem>
+                      <SelectItem value="28">28px</SelectItem>
+                      <SelectItem value="32">32px</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="flex-1">
+                  <Label htmlFor="fontFamily">Font Family</Label>
+                  <Select value={fontFamily} onValueChange={setFontFamily}>
+                    <SelectTrigger id="fontFamily">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="sans">Sans Serif</SelectItem>
+                      <SelectItem value="serif">Serif</SelectItem>
+                      <SelectItem value="mono">Monospace</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+              <Textarea
+                value={editorText}
+                onChange={(e) => setEditorText(e.target.value)}
+                placeholder="Start typing here..."
+                className="min-h-[400px] resize-none"
+                style={{
+                  fontSize: `${fontSize}px`,
+                  fontFamily: fontFamily === 'sans' ? 'var(--font-sans)' : fontFamily === 'serif' ? 'Georgia, serif' : 'monospace'
+                }}
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
