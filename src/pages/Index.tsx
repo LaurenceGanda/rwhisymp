@@ -1,7 +1,7 @@
-import SpeechRecognitionApp from '@/components/SpeechRecognitionApp';
+import RealtimeWhisperApp from '@/components/RealtimeWhisperApp';
 
 const Index = () => {
-  return <SpeechRecognitionApp />;
+  return <RealtimeWhisperApp />;
 };
 
 export default Index;
